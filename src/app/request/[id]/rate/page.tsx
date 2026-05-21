@@ -91,7 +91,7 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-8 pb-40">
+      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-8 pb-8">
         <Card className="p-6 flex flex-col items-center text-center">
           <Avatar initials={other.initials} color={other.avatarColor} size={88} />
           <h2 className="mt-4 text-2xl font-extrabold text-ink-900">{other.name}</h2>
@@ -162,7 +162,7 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
         )}
       </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
+      <footer className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
         <div className="max-w-3xl mx-auto">
           <Button onClick={submit} size="lg" fullWidth disabled={rating === 0}>
             Pošalji ocenu

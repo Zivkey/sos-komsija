@@ -117,7 +117,7 @@ function NewRequestInner() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 sm:py-8 pb-48">
+      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 sm:py-8 pb-8">
         {step === "category" && (
           <div className="animate-fade-in">
             <h1 className="text-3xl font-extrabold text-ink-900 tracking-tight">
@@ -461,7 +461,7 @@ function NewRequestInner() {
         )}
       </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
+      <footer className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
         <div className="max-w-3xl mx-auto">
           {step === "review" ? (
             <Button onClick={submit} size="lg" fullWidth>

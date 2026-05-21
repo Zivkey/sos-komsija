@@ -75,7 +75,7 @@ export default function RequestPage({ params }: { params: Promise<{ id: string }
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 pb-40 space-y-5">
+      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 pb-8 space-y-5">
         {/* Status hero */}
         <StatusHero
           status={request.status}
@@ -230,7 +230,7 @@ export default function RequestPage({ params }: { params: Promise<{ id: string }
         )}
       </main>
 
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
+      <footer className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
         <div className="max-w-3xl mx-auto space-y-2">
           {request.status === "accepted" && !isUser && (
             <Button

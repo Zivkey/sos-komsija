@@ -72,7 +72,7 @@ export default function PaymentPage({ params }: { params: Promise<{ id: string }
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 sm:py-8 pb-40">
+      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 sm:py-8 pb-8">
         {stage === "card" && (
           <div className="animate-fade-in space-y-6">
             {/* Order summary */}
@@ -225,7 +225,7 @@ export default function PaymentPage({ params }: { params: Promise<{ id: string }
       </main>
 
       {stage === "card" && (
-        <footer className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
+        <footer className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
           <div className="max-w-3xl mx-auto">
             <Button onClick={pay} size="lg" fullWidth>
               <Lock size={18} /> Plati {request.price.toLocaleString("sr-RS")} RSD <ArrowRight size={20} />
