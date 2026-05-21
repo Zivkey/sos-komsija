@@ -116,7 +116,7 @@ export function Card({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={`bg-white rounded-3xl border border-ink-200/60 shadow-sm ${className}`}
+      className={`bg-white rounded-3xl border border-ink-200 shadow-sm ${className}`}
       {...props}
     >
       {children}
