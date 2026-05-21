@@ -17,6 +17,8 @@ export type Category = {
   iconColor: string;
   basePrice: number;
   pricePerHour: number;
+  /** [min, max] suggested price per hour in RSD */
+  hourlyRange: [number, number];
   gradient: string;
   iconBg: string;
   tagline: string;
@@ -32,6 +34,7 @@ export const CATEGORIES: Category[] = [
     iconColor: "text-rose-500",
     basePrice: 600,
     pricePerHour: 600,
+    hourlyRange: [500, 900],
     gradient: "from-pink-400 to-rose-500",
     iconBg: "bg-rose-50",
     tagline: "Sigurnost na prvom mestu",
@@ -45,6 +48,7 @@ export const CATEGORIES: Category[] = [
     iconColor: "text-amber-600",
     basePrice: 1200,
     pricePerHour: 1500,
+    hourlyRange: [1200, 2000],
     gradient: "from-amber-400 to-orange-500",
     iconBg: "bg-amber-50",
     tagline: "Snažne ruke kada trebaju",
@@ -58,6 +62,7 @@ export const CATEGORIES: Category[] = [
     iconColor: "text-sky-600",
     basePrice: 1500,
     pricePerHour: 2000,
+    hourlyRange: [1500, 2800],
     gradient: "from-sky-400 to-blue-500",
     iconBg: "bg-sky-50",
     tagline: "Hitne intervencije 24/7",
@@ -71,6 +76,7 @@ export const CATEGORIES: Category[] = [
     iconColor: "text-cyan-600",
     basePrice: 1000,
     pricePerHour: 1200,
+    hourlyRange: [900, 1500],
     gradient: "from-cyan-400 to-teal-500",
     iconBg: "bg-cyan-50",
     tagline: "Čistoća do detalja",
@@ -84,6 +90,7 @@ export const CATEGORIES: Category[] = [
     iconColor: "text-emerald-600",
     basePrice: 500,
     pricePerHour: 700,
+    hourlyRange: [500, 1000],
     gradient: "from-emerald-400 to-teal-500",
     iconBg: "bg-emerald-50",
     tagline: "Tvoj ljubimac u dobrim rukama",
@@ -97,6 +104,7 @@ export const CATEGORIES: Category[] = [
     iconColor: "text-violet-600",
     basePrice: 400,
     pricePerHour: 500,
+    hourlyRange: [400, 800],
     gradient: "from-violet-400 to-purple-500",
     iconBg: "bg-violet-50",
     tagline: "Komšijska pomoć kada se najviše ceni",

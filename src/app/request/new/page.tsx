@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   Clock,
   FileText,
+  Info,
   MapPin,
   Shield,
   Sparkles,
@@ -43,18 +44,42 @@ function NewRequestInner() {
   const [hours, setHours] = useState(1);
   const [durationMode, setDurationMode] = useState<"hours" | "minutes">("hours");
   const [minutes, setMinutes] = useState(30);
+  const [pricingMode, setPricingMode] = useState<"total" | "per_hour">("total");
+  const [userPrice, setUserPrice] = useState<number | null>(null);
 
   const cat = getCategory(category);
   const CatIcon = cat.Icon;
 
-  const price = useMemo(() => {
+  const isMultiHour = durationMode === "hours" && hours > 1;
+
+  // Suggested default price when user hasn't set one yet
+  const suggestedPrice = useMemo(() => {
+    const midHourly = Math.round((cat.hourlyRange[0] + cat.hourlyRange[1]) / 2);
     if (durationMode === "minutes") {
-      // Proportional to minutes (min charge = base price)
-      const proportional = Math.round((cat.pricePerHour * minutes) / 60);
-      return Math.max(cat.basePrice, proportional);
+      const proportional = Math.round((midHourly * minutes) / 60);
+      return Math.max(cat.basePrice, Math.round(proportional / 50) * 50);
     }
-    return cat.basePrice + Math.max(0, hours - 1) * cat.pricePerHour;
-  }, [cat, hours, minutes, durationMode]);
+    if (pricingMode === "per_hour") return midHourly;
+    return midHourly * hours;
+  }, [cat, hours, minutes, durationMode, pricingMode]);
+
+  // Reset user price when context changes
+  // (effect-free: just compute effective input value)
+  const effectiveUserPrice = userPrice ?? suggestedPrice;
+
+  const price = useMemo(() => {
+    if (isMultiHour && pricingMode === "per_hour") {
+      return effectiveUserPrice * hours;
+    }
+    return effectiveUserPrice;
+  }, [effectiveUserPrice, pricingMode, hours, isMultiHour]);
+
+  const pricePerHourEffective = useMemo(() => {
+    if (durationMode === "minutes") {
+      return Math.round((price * 60) / minutes);
+    }
+    return Math.round(price / hours);
+  }, [price, durationMode, minutes, hours]);
 
   const durationLabel = useMemo(() => {
     if (durationMode === "minutes") return `${minutes} min`;
@@ -375,47 +400,142 @@ function NewRequestInner() {
           <div className="animate-fade-in space-y-6">
             <div>
               <h1 className="text-3xl font-extrabold text-ink-900 tracking-tight">
-                Cena
+                Tvoja cena
               </h1>
               <p className="mt-2 text-ink-600">
-                Transparentna cena — bez skrivenih troškova.
+                Sam postavljaš cenu — što je veća, više pružaoca će se prijaviti.
               </p>
             </div>
 
+            {/* Market range hint */}
+            <Card className="p-5 bg-gradient-to-br from-sky-50 to-white border-sky-100">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white border border-sky-200 flex items-center justify-center text-sky-600 shrink-0">
+                  <Info size={20} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-sky-700 uppercase tracking-wider">
+                    Tržišni prosek za {cat.short}
+                  </div>
+                  <div className="mt-1 text-xl font-extrabold text-ink-900">
+                    {cat.hourlyRange[0].toLocaleString("sr-RS")} – {cat.hourlyRange[1].toLocaleString("sr-RS")}
+                    <span className="text-sm text-ink-500 font-bold ml-1.5">RSD/h</span>
+                  </div>
+                  <div className="mt-1 text-xs text-ink-500">
+                    Bazirano na nedavnim zahtevima u Vračaru
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Pricing mode toggle - only when multi-hour */}
+            {isMultiHour && (
+              <div>
+                <div className="text-sm font-semibold text-ink-700 mb-2 ml-1">
+                  Kako želiš da postaviš cenu?
+                </div>
+                <div className="flex bg-ink-100 rounded-2xl p-1">
+                  <button
+                    onClick={() => {
+                      setPricingMode("total");
+                      setUserPrice(null);
+                    }}
+                    className={`flex-1 h-12 rounded-xl font-bold text-sm transition-all ${
+                      pricingMode === "total"
+                        ? "bg-white text-brand-600 shadow-sm"
+                        : "text-ink-500 hover:text-ink-700"
+                    }`}
+                  >
+                    Ukupna cena
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPricingMode("per_hour");
+                      setUserPrice(null);
+                    }}
+                    className={`flex-1 h-12 rounded-xl font-bold text-sm transition-all ${
+                      pricingMode === "per_hour"
+                        ? "bg-white text-brand-600 shadow-sm"
+                        : "text-ink-500 hover:text-ink-700"
+                    }`}
+                  >
+                    Po satu
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Price input */}
             <Card className="p-6">
               <div className="text-center">
-                <div className="text-sm font-semibold text-ink-500 uppercase tracking-wider">
-                  Procenjena cena
+                <div className="text-xs font-semibold text-ink-500 uppercase tracking-wider">
+                  {isMultiHour && pricingMode === "per_hour" ? "Cena po satu" : "Ukupna cena"}
                 </div>
-                <div className="mt-3 text-6xl font-extrabold text-ink-900 tracking-tight">
-                  {price.toLocaleString("sr-RS")}
-                  <span className="text-2xl text-ink-500 font-bold ml-2">RSD</span>
+                <div className="mt-4 flex items-center justify-center gap-2">
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={50}
+                    step={50}
+                    value={effectiveUserPrice}
+                    onChange={(e) => {
+                      const v = Math.max(50, Number(e.target.value) || 50);
+                      setUserPrice(v);
+                    }}
+                    className="w-44 text-center text-5xl sm:text-6xl font-extrabold text-ink-900 tracking-tight bg-transparent border-b-2 border-brand-300 focus:outline-none focus:border-brand-500"
+                  />
+                  <span className="text-2xl text-ink-500 font-bold self-end mb-2">RSD{isMultiHour && pricingMode === "per_hour" ? "/h" : ""}</span>
                 </div>
-                <div className="mt-2 text-sm text-ink-500">
-                  {durationLabel} · {cat.pricePerHour} RSD/h
+
+                {/* Quick price suggestions */}
+                <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                  {(() => {
+                    const opts = isMultiHour && pricingMode === "per_hour"
+                      ? [cat.hourlyRange[0], Math.round((cat.hourlyRange[0] + cat.hourlyRange[1]) / 2), cat.hourlyRange[1]]
+                      : durationMode === "minutes"
+                      ? [
+                          Math.max(cat.basePrice, Math.round((cat.hourlyRange[0] * minutes) / 60 / 50) * 50),
+                          Math.max(cat.basePrice, Math.round((cat.hourlyRange[1] * minutes) / 60 / 50) * 50),
+                        ]
+                      : [
+                          cat.hourlyRange[0] * hours,
+                          Math.round(((cat.hourlyRange[0] + cat.hourlyRange[1]) / 2) * hours),
+                          cat.hourlyRange[1] * hours,
+                        ];
+                    return opts.map((p) => (
+                      <button
+                        key={p}
+                        onClick={() => setUserPrice(p)}
+                        className={`px-4 h-10 rounded-full font-semibold text-sm transition-all ${
+                          effectiveUserPrice === p
+                            ? "bg-brand-500 text-white shadow"
+                            : "bg-ink-100 hover:bg-ink-200 text-ink-700"
+                        }`}
+                      >
+                        {p.toLocaleString("sr-RS")} RSD
+                      </button>
+                    ));
+                  })()}
                 </div>
               </div>
 
               <div className="mt-6 pt-6 border-t border-ink-200 space-y-2">
-                {durationMode === "hours" ? (
-                  <>
-                    <Row label={`Osnovna cena (1h)`} value={`${cat.basePrice} RSD`} />
-                    {hours > 1 && (
-                      <Row
-                        label={`Dodatno (${hours - 1}h × ${cat.pricePerHour})`}
-                        value={`${(hours - 1) * cat.pricePerHour} RSD`}
-                      />
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <Row label={`Tarifa (${cat.pricePerHour} RSD/h)`} value={`${minutes} min`} />
-                    <Row label="Minimalna naplata" value={`${cat.basePrice} RSD`} muted />
-                  </>
+                <Row label="Trajanje" value={durationLabel} />
+                {isMultiHour && pricingMode === "per_hour" && (
+                  <Row
+                    label={`${effectiveUserPrice.toLocaleString("sr-RS")} RSD × ${hours}h`}
+                    value={`${price.toLocaleString("sr-RS")} RSD`}
+                  />
+                )}
+                {!isMultiHour && durationMode !== "minutes" && hours > 0 && (
+                  <Row label="Cena po satu (ekvivalent)" value={`${pricePerHourEffective.toLocaleString("sr-RS")} RSD/h`} muted />
+                )}
+                {durationMode === "minutes" && (
+                  <Row label="Cena po satu (ekvivalent)" value={`${pricePerHourEffective.toLocaleString("sr-RS")} RSD/h`} muted />
                 )}
                 <Row label="Provizija platforme" value="Uračunato" muted />
                 <div className="pt-2 mt-2 border-t border-ink-200 flex justify-between items-center">
-                  <div className="font-bold text-ink-900">Ukupno</div>
+                  <div className="font-bold text-ink-900">Ukupno za platiti</div>
                   <div className="font-extrabold text-xl text-ink-900">
                     {price.toLocaleString("sr-RS")} RSD
                   </div>
@@ -423,10 +543,43 @@ function NewRequestInner() {
               </div>
             </Card>
 
-            <div className="flex items-start gap-3 p-4 bg-brand-50 rounded-2xl border border-brand-100">
-              <Sparkles size={20} className="text-brand-600 shrink-0 mt-0.5" />
-              <p className="text-sm text-brand-900 leading-relaxed">
-                <strong>Escrow zaštita.</strong> Novac se uplaćuje na siguran račun i pušta tek nakon što potvrdiš da je posao odrađen.
+            {/* Below/above market indicator */}
+            {(() => {
+              const equiv = pricePerHourEffective;
+              if (equiv < cat.hourlyRange[0]) {
+                return (
+                  <div className="flex items-start gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-200">
+                    <Info size={20} className="text-amber-600 shrink-0 mt-0.5" />
+                    <p className="text-sm text-amber-900 leading-relaxed">
+                      <strong>Ispod proseka.</strong> Tvoja cena je ispod tržišnog raspona — može biti potrebno duže da se neko prijavi.
+                    </p>
+                  </div>
+                );
+              }
+              if (equiv > cat.hourlyRange[1] * 1.2) {
+                return (
+                  <div className="flex items-start gap-3 p-4 bg-emerald-50 rounded-2xl border border-emerald-200">
+                    <Sparkles size={20} className="text-emerald-600 shrink-0 mt-0.5" />
+                    <p className="text-sm text-emerald-900 leading-relaxed">
+                      <strong>Iznad proseka.</strong> Sjajno — pružaoci u blizini biće brzo zainteresovani.
+                    </p>
+                  </div>
+                );
+              }
+              return (
+                <div className="flex items-start gap-3 p-4 bg-brand-50 rounded-2xl border border-brand-100">
+                  <Check size={20} className="text-brand-600 shrink-0 mt-0.5" stroke={3} />
+                  <p className="text-sm text-brand-900 leading-relaxed">
+                    <strong>U okviru proseka.</strong> Tvoja cena je u tržišnom rasponu — očekuj odziv u kratkom roku.
+                  </p>
+                </div>
+              );
+            })()}
+
+            <div className="flex items-start gap-3 p-4 bg-ink-50 rounded-2xl border border-ink-200/60">
+              <Shield size={20} className="text-ink-600 shrink-0 mt-0.5" />
+              <p className="text-sm text-ink-700 leading-relaxed">
+                <strong>Escrow zaštita.</strong> Novac se uplaćuje na siguran račun i pušta pružaocu tek nakon što potvrdiš da je posao odrađen.
               </p>
             </div>
           </div>
