@@ -1,0 +1,12 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- House outline -->
+  <path d="M15 50 L50 18 L85 50 L85 88 L15 88 Z" stroke="#f97316" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <!-- Left person -->
+  <circle cx="33" cy="58" r="5" fill="#f97316" />
+  <path d="M33 64 L33 78 M33 70 L26 80 M33 70 L40 70" stroke="#f97316" stroke-width="3.5" stroke-linecap="round" />
+  <!-- Right person -->
+  <circle cx="67" cy="58" r="5" fill="#f97316" />
+  <path d="M67 64 L67 78 M67 70 L74 80 M67 70 L60 70" stroke="#f97316" stroke-width="3.5" stroke-linecap="round" />
+  <!-- High-five sparks -->
+  <path d="M50 56 L50 50 M44 58 L40 54 M56 58 L60 54 M46 64 L42 64 M54 64 L58 64" stroke="#f97316" stroke-width="2.5" stroke-linecap="round" />
+</svg>
