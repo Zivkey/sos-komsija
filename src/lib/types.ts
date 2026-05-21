@@ -5,7 +5,8 @@ export type CategoryId =
   | "moving"
   | "repairs"
   | "pets"
-  | "elderly";
+  | "elderly"
+  | "cleaning";
 
 export type RequestStatus =
   | "pending"

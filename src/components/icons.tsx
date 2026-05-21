@@ -296,13 +296,37 @@ export function Wrench({ size = 24, className = "", stroke = 2 }: IconProps) {
   );
 }
 export function PawPrint({ size = 24, className = "", stroke = 2 }: IconProps) {
+  // Classic paw: 1 large pad + 4 toe beans above
   return (
-    <svg {...base(size, className, stroke)} fill="currentColor" stroke="none">
-      <ellipse cx="7" cy="8" rx="2" ry="2.5" />
-      <ellipse cx="17" cy="8" rx="2" ry="2.5" />
-      <ellipse cx="4" cy="14" rx="1.8" ry="2.3" />
-      <ellipse cx="20" cy="14" rx="1.8" ry="2.3" />
-      <path d="M12 11c-2.5 0-5 2-5 4.5 0 1.5 1.2 2.5 2.5 2.5h5c1.3 0 2.5-1 2.5-2.5C17 13 14.5 11 12 11z" />
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} aria-hidden>
+      <ellipse cx="6" cy="9" rx="2" ry="2.6" fill="currentColor" />
+      <ellipse cx="10" cy="5.5" rx="2" ry="2.6" fill="currentColor" />
+      <ellipse cx="14" cy="5.5" rx="2" ry="2.6" fill="currentColor" />
+      <ellipse cx="18" cy="9" rx="2" ry="2.6" fill="currentColor" />
+      <path
+        d="M12 11.5c-3 0-5.5 2.3-5.5 5.2 0 1.8 1.4 3.3 3.2 3.3h4.6c1.8 0 3.2-1.5 3.2-3.3 0-2.9-2.5-5.2-5.5-5.2z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+export function Sparkle({ size = 24, className = "", stroke = 2 }: IconProps) {
+  // Cleaning sparkle / shine icon
+  return (
+    <svg {...base(size, className, stroke)}>
+      <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" />
+      <path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" />
+    </svg>
+  );
+}
+export function Spray({ size = 24, className = "", stroke = 2 }: IconProps) {
+  // Spray bottle for cleaning
+  return (
+    <svg {...base(size, className, stroke)}>
+      <path d="M8 8h6v3a4 4 0 0 1 4 4v6a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V8z" />
+      <path d="M14 8V5h-4l-2-2v5" />
+      <path d="M17 5h2M17 3h3M19 7h2" />
+      <path d="M10 14h2" />
     </svg>
   );
 }

@@ -109,7 +109,7 @@ function UserHome() {
                   <div className="mt-3 font-bold text-ink-900 text-[15px] leading-tight">
                     {c.name}
                   </div>
-                  <div className="text-xs text-ink-500 mt-1">od {c.basePrice} RSD</div>
+                  <div className="text-xs text-ink-500 mt-1 line-clamp-1">{c.short}</div>
                 </Card>
               </Link>
               );

@@ -5,6 +5,7 @@ import {
   Wrench,
   PawPrint,
   HeartHand,
+  Sparkle,
 } from "@/components/icons";
 
 export type Category = {
@@ -39,7 +40,7 @@ export const CATEGORIES: Category[] = [
     id: "moving",
     name: "Fizička pomoć",
     short: "Selidba",
-    description: "Selidba, prenos nameštaja, ručna pomoć",
+    description: "Selidba i prenos nameštaja",
     Icon: Truck,
     iconColor: "text-amber-600",
     basePrice: 1200,
@@ -62,6 +63,19 @@ export const CATEGORIES: Category[] = [
     tagline: "Hitne intervencije 24/7",
   },
   {
+    id: "cleaning",
+    name: "Čišćenje",
+    short: "Čišćenje",
+    description: "Čišćenje stana, dubinsko pranje, higijena",
+    Icon: Sparkle,
+    iconColor: "text-cyan-600",
+    basePrice: 1000,
+    pricePerHour: 1200,
+    gradient: "from-cyan-400 to-teal-500",
+    iconBg: "bg-cyan-50",
+    tagline: "Čistoća do detalja",
+  },
+  {
     id: "pets",
     name: "Ljubimci",
     short: "Šetnja & čuvanje",
@@ -77,8 +91,8 @@ export const CATEGORIES: Category[] = [
   {
     id: "elderly",
     name: "Pomoć starijima",
-    short: "Kupovina & društvo",
-    description: "Kupovina, dostava lekova, društvo i razgovor",
+    short: "Kupovina & IT",
+    description: "Kupovina, dostava lekova, IT pomoć i administracija",
     Icon: HeartHand,
     iconColor: "text-violet-600",
     basePrice: 400,

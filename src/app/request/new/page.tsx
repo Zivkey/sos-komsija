@@ -41,13 +41,25 @@ function NewRequestInner() {
   const [whenChoice, setWhenChoice] = useState<"now" | "today" | "tomorrow" | "custom">("now");
   const [customTime, setCustomTime] = useState("");
   const [hours, setHours] = useState(1);
+  const [durationMode, setDurationMode] = useState<"hours" | "minutes">("hours");
+  const [minutes, setMinutes] = useState(30);
 
   const cat = getCategory(category);
   const CatIcon = cat.Icon;
 
   const price = useMemo(() => {
+    if (durationMode === "minutes") {
+      // Proportional to minutes (min charge = base price)
+      const proportional = Math.round((cat.pricePerHour * minutes) / 60);
+      return Math.max(cat.basePrice, proportional);
+    }
     return cat.basePrice + Math.max(0, hours - 1) * cat.pricePerHour;
-  }, [cat, hours]);
+  }, [cat, hours, minutes, durationMode]);
+
+  const durationLabel = useMemo(() => {
+    if (durationMode === "minutes") return `${minutes} min`;
+    return `${hours} sat${hours > 1 ? (hours < 5 ? "a" : "i") : ""}`;
+  }, [durationMode, minutes, hours]);
 
   const stepIndex = STEPS.indexOf(step);
 
@@ -65,8 +77,8 @@ function NewRequestInner() {
 
   const whenLabel = useMemo(() => {
     if (whenChoice === "now") return "Što pre (u sledećih sat vremena)";
-    if (whenChoice === "today") return "Danas, popodne";
-    if (whenChoice === "tomorrow") return "Sutra ujutru";
+    if (whenChoice === "today") return "Danas u toku dana";
+    if (whenChoice === "tomorrow") return "Sutra";
     return customTime || "Po dogovoru";
   }, [whenChoice, customTime]);
 
@@ -133,9 +145,6 @@ function NewRequestInner() {
                       <div className="flex-1">
                         <div className="font-extrabold text-ink-900">{c.name}</div>
                         <div className="text-sm text-ink-600 mt-0.5">{c.description}</div>
-                        <div className="mt-2 text-xs font-semibold text-brand-600">
-                          od {c.basePrice} RSD
-                        </div>
                       </div>
                       {selected && (
                         <div className="w-6 h-6 rounded-full bg-brand-500 flex items-center justify-center shrink-0">
@@ -246,8 +255,8 @@ function NewRequestInner() {
             <div className="space-y-3">
               {([
                 { id: "now", label: "Što pre", sub: "Pružaoci u blizini", Icon: Zap, color: "text-amber-500" },
-                { id: "today", label: "Danas, popodne", sub: "Posle 14h", Icon: Sun, color: "text-orange-500" },
-                { id: "tomorrow", label: "Sutra ujutru", sub: "Između 8 i 12h", Icon: Sunrise, color: "text-rose-500" },
+                { id: "today", label: "Danas u toku dana", sub: "Bilo kada do 22h", Icon: Sun, color: "text-orange-500" },
+                { id: "tomorrow", label: "Sutra", sub: "Bilo kada tokom dana", Icon: Sunrise, color: "text-rose-500" },
                 { id: "custom", label: "Drugi termin", sub: "Po dogovoru", Icon: Calendar, color: "text-sky-500" },
               ] as const).map((o) => {
                 const OIcon = o.Icon;
@@ -290,13 +299,16 @@ function NewRequestInner() {
               <div className="text-sm font-semibold text-ink-700 mb-3">
                 Procenjeno trajanje
               </div>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-5 gap-2">
                 {[1, 2, 3, 4].map((h) => (
                   <button
                     key={h}
-                    onClick={() => setHours(h)}
+                    onClick={() => {
+                      setDurationMode("hours");
+                      setHours(h);
+                    }}
                     className={`h-14 rounded-2xl border-2 font-bold transition-all ${
-                      hours === h
+                      durationMode === "hours" && hours === h
                         ? "border-brand-500 bg-brand-500 text-white"
                         : "border-ink-200 bg-white text-ink-700 hover:border-brand-300"
                     }`}
@@ -304,7 +316,57 @@ function NewRequestInner() {
                     {h}h{h === 4 ? "+" : ""}
                   </button>
                 ))}
+                <button
+                  onClick={() => setDurationMode("minutes")}
+                  className={`h-14 rounded-2xl border-2 font-bold transition-all ${
+                    durationMode === "minutes"
+                      ? "border-brand-500 bg-brand-500 text-white"
+                      : "border-ink-200 bg-white text-ink-700 hover:border-brand-300"
+                  }`}
+                >
+                  Drugo
+                </button>
               </div>
+              {durationMode === "minutes" && (
+                <div className="mt-4 rounded-2xl border-2 border-brand-200 bg-brand-50/40 p-4 animate-fade-in">
+                  <div className="text-xs font-semibold text-ink-700 mb-3">
+                    Koliko minuta?
+                  </div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[15, 30, 45, 60].map((m) => (
+                      <button
+                        key={m}
+                        onClick={() => setMinutes(m)}
+                        className={`h-12 rounded-xl border-2 font-bold text-sm transition-all ${
+                          minutes === m
+                            ? "border-brand-500 bg-white text-brand-600"
+                            : "border-ink-200 bg-white text-ink-700 hover:border-brand-300"
+                        }`}
+                      >
+                        {m} min
+                      </button>
+                    ))}
+                  </div>
+                  <div className="mt-3 flex items-center gap-3">
+                    <input
+                      type="number"
+                      min={5}
+                      max={59}
+                      step={5}
+                      value={minutes}
+                      onChange={(e) => {
+                        const v = Math.max(5, Math.min(59, Number(e.target.value) || 5));
+                        setMinutes(v);
+                      }}
+                      className="flex-1 h-12 px-4 bg-white border-2 border-ink-200 rounded-xl text-[15px] font-bold text-ink-900 focus:outline-none focus:border-brand-500"
+                    />
+                    <span className="text-sm font-semibold text-ink-600">minuta</span>
+                  </div>
+                  <div className="mt-2 text-[11px] text-ink-500">
+                    Min. 5 min · maks. 59 min (za duže koristi opciju u satima)
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -330,17 +392,26 @@ function NewRequestInner() {
                   <span className="text-2xl text-ink-500 font-bold ml-2">RSD</span>
                 </div>
                 <div className="mt-2 text-sm text-ink-500">
-                  {hours}h × {cat.pricePerHour} RSD/h
+                  {durationLabel} · {cat.pricePerHour} RSD/h
                 </div>
               </div>
 
               <div className="mt-6 pt-6 border-t border-ink-200 space-y-2">
-                <Row label={`Osnovna cena (1h)`} value={`${cat.basePrice} RSD`} />
-                {hours > 1 && (
-                  <Row
-                    label={`Dodatno (${hours - 1}h × ${cat.pricePerHour})`}
-                    value={`${(hours - 1) * cat.pricePerHour} RSD`}
-                  />
+                {durationMode === "hours" ? (
+                  <>
+                    <Row label={`Osnovna cena (1h)`} value={`${cat.basePrice} RSD`} />
+                    {hours > 1 && (
+                      <Row
+                        label={`Dodatno (${hours - 1}h × ${cat.pricePerHour})`}
+                        value={`${(hours - 1) * cat.pricePerHour} RSD`}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Row label={`Tarifa (${cat.pricePerHour} RSD/h)`} value={`${minutes} min`} />
+                    <Row label="Minimalna naplata" value={`${cat.basePrice} RSD`} muted />
+                  </>
                 )}
                 <Row label="Provizija platforme" value="Uračunato" muted />
                 <div className="pt-2 mt-2 border-t border-ink-200 flex justify-between items-center">
@@ -375,7 +446,7 @@ function NewRequestInner() {
               <ReviewRow icon={<FileText size={20} />} iconColor="text-violet-600" label="Opis" value={description || "—"} />
               <ReviewRow icon={<MapPin size={20} />} iconColor="text-rose-500" label="Lokacija" value={`${address}, Vračar`} />
               <ReviewRow icon={<Clock size={20} />} iconColor="text-sky-600" label="Kada" value={whenLabel} />
-              <ReviewRow icon={<Timer size={20} />} iconColor="text-amber-600" label="Trajanje" value={`${hours} sat${hours > 1 ? "a" : ""}`} />
+              <ReviewRow icon={<Timer size={20} />} iconColor="text-amber-600" label="Trajanje" value={durationLabel} />
               <div className="pt-4 border-t border-ink-200 flex justify-between items-center">
                 <div>
                   <div className="text-sm text-ink-500 font-medium">Ukupno za platiti</div>
@@ -463,8 +534,9 @@ const SUGGESTIONS: Record<CategoryId, string[]> = {
   babysitting: ["dvoje dece", "5 i 8 god", "do 22h", "iskusna dadilja", "vegetarijanska hrana"],
   moving: ["kauč", "frižider", "3. sprat bez lifta", "krhki predmeti", "trebaju 2 osobe"],
   repairs: ["curi slavina", "neispravan prekidač", "začepljen sifon", "hitno", "imam materijal"],
+  cleaning: ["2 sobe + kuhinja", "dubinsko pranje", "imam sredstva", "posle renoviranja", "redovno održavanje"],
   pets: ["zlatni retriver", "miran pas", "60 minuta", "park Manjež", "ima poslastice"],
-  elderly: ["lista namirnica", "lekovi iz apoteke", "Maxi market", "stariji čovek", "treba društvo"],
+  elderly: ["lista namirnica", "lekovi iz apoteke", "Maxi market", "IT pomoć - laptop", "papirologija"],
 };
 
 function getPlaceholder(c: CategoryId): string {
@@ -472,6 +544,7 @@ function getPlaceholder(c: CategoryId): string {
     babysitting: "npr. Čuvanje dvoje dece (5 i 8 god) od 19h do 22h, deca su mirna…",
     moving: "npr. Prenos kauča iz kombija na 3. sprat bez lifta…",
     repairs: "npr. Curi slavina u kuhinji već 2 dana, treba zameniti dihtung…",
+    cleaning: "npr. Generalno čišćenje stana 60m², 2 sobe + kuhinja + kupatilo…",
     pets: "npr. Šetnja zlatnog retrivera 1h u parku Manjež…",
     elderly: "npr. Kupovina iz Maxija — hleb, mleko, jogurt, voće…",
   };
