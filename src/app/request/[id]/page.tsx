@@ -75,7 +75,7 @@ export default function RequestPage({ params }: { params: Promise<{ id: string }
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 pb-32 space-y-5">
+      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 pb-40 space-y-5">
         {/* Status hero */}
         <StatusHero
           status={request.status}

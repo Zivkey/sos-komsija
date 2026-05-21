@@ -117,7 +117,7 @@ function NewRequestInner() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 sm:py-8 pb-32">
+      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 sm:py-8 pb-48">
         {step === "category" && (
           <div className="animate-fade-in">
             <h1 className="text-3xl font-extrabold text-ink-900 tracking-tight">

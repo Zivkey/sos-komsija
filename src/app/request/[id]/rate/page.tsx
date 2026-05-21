@@ -91,7 +91,7 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-8 pb-32">
+      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-8 pb-40">
         <Card className="p-6 flex flex-col items-center text-center">
           <Avatar initials={other.initials} color={other.avatarColor} size={88} />
           <h2 className="mt-4 text-2xl font-extrabold text-ink-900">{other.name}</h2>

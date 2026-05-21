@@ -72,7 +72,7 @@ export default function PaymentPage({ params }: { params: Promise<{ id: string }
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 sm:py-8 pb-32">
+      <main className="flex-1 max-w-3xl mx-auto w-full px-5 py-6 sm:py-8 pb-40">
         {stage === "card" && (
           <div className="animate-fade-in space-y-6">
             {/* Order summary */}
