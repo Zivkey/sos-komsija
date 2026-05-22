@@ -83,7 +83,7 @@ const slides: Slide[] = [
   },
   {
     IconArt: ArtMap,
-    title: "Tvoja opština,\ntvoji komšije",
+    title: "Tvoja opština,\ntvoje komšije",
     description:
       "Pronađi pomoć tačno tamo gde živiš. Ljudi iz kraja, koji znaju tvoj komšiluk.",
   },
