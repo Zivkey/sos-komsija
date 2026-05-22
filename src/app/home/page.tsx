@@ -311,15 +311,21 @@ function ProviderHome() {
 
 function RequestRowProvider({ request }: { request: import("@/lib/types").ServiceRequest }) {
   const cat = getCategory(request.category);
+  const CatIcon = cat.Icon;
   const age = Math.floor((Date.now() - request.createdAt) / 60000);
   const ageLabel = age < 60 ? `pre ${age}min` : `pre ${Math.floor(age / 60)}h`;
   return (
     <Link href={`/request/${request.id}`}>
       <Card className="p-4 border-ink-200 hover:border-brand-300 hover:shadow-md transition-all hover:-translate-y-0.5 active:scale-[0.99]">
         <div className="flex items-start gap-4">
+          <div className={`w-14 h-14 rounded-2xl ${cat.iconBg} flex items-center justify-center shrink-0 ${cat.iconColor}`}>
+            <CatIcon size={28} />
+          </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-              <Badge variant="brand">{cat.short}</Badge>
+              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${cat.iconBg} ${cat.iconColor}`}>
+                {cat.short}
+              </span>
               <span className="text-xs text-ink-500 flex items-center gap-1">
                 <Clock size={12} /> {ageLabel}
               </span>

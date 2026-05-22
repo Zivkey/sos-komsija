@@ -460,6 +460,39 @@ export function Trash({ size = 24, className = "", stroke = 2 }: IconProps) {
     </svg>
   );
 }
+export function Mail({ size = 24, className = "", stroke = 2 }: IconProps) {
+  return (
+    <svg {...base(size, className, stroke)}>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="M3 7l9 7 9-7" />
+    </svg>
+  );
+}
+export function MailSent({ size = 24, className = "", stroke = 2 }: IconProps) {
+  return (
+    <svg {...base(size, className, stroke)}>
+      <path d="M3 5h12l6 6v8H3z" />
+      <path d="M3 5l9 7 6-4.5" />
+      <path d="M17 16l2 2 4-4" />
+    </svg>
+  );
+}
+export function FileSignature({ size = 24, className = "", stroke = 2 }: IconProps) {
+  return (
+    <svg {...base(size, className, stroke)}>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6M8 13h5M8 17c1.5-2 4-2 6 0" />
+    </svg>
+  );
+}
+export function Home2({ size = 24, className = "", stroke = 2 }: IconProps) {
+  return (
+    <svg {...base(size, className, stroke)}>
+      <path d="M3 12L12 4l9 8" />
+      <path d="M5 10v10h14V10" />
+    </svg>
+  );
+}
 export function Users({ size = 24, className = "", stroke = 2 }: IconProps) {
   return (
     <svg {...base(size, className, stroke)}>
