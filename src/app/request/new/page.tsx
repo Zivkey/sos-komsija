@@ -120,7 +120,7 @@ function NewRequestInner() {
 
   return (
     <div className="min-h-dvh flex flex-col bg-ink-50/60">
-      <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-xl border-b border-ink-200/60">
+      <header className="sticky top-0 z-30 bg-white border-b border-ink-200/60">
         <div className="max-w-3xl mx-auto px-5 py-4 flex items-center gap-3">
           <button
             onClick={goBack}
@@ -248,7 +248,7 @@ function NewRequestInner() {
 
             <div className="relative rounded-3xl overflow-hidden h-56 border border-ink-200/60">
               <MiniMapWithPin />
-              <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur rounded-2xl p-3 flex items-center gap-3 shadow-lg">
+              <div className="absolute bottom-3 left-3 right-3 bg-white rounded-2xl p-3 flex items-center gap-3 shadow-lg">
                 <div className="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center">
                   <MapPin size={18} className="text-brand-600" />
                 </div>
@@ -614,7 +614,7 @@ function NewRequestInner() {
         )}
       </main>
 
-      <footer className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
+      <footer className="sticky bottom-0 z-20 bg-white border-t border-ink-200/60 p-4">
         <div className="max-w-3xl mx-auto">
           {step === "review" ? (
             <Button onClick={submit} size="lg" fullWidth>

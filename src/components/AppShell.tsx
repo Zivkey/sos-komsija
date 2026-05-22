@@ -79,7 +79,7 @@ function Header({
   onRoleChange: (r: Role) => void;
 }) {
   return (
-    <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-xl border-b border-ink-200/60">
+    <header className="sticky top-0 z-30 bg-white border-b border-ink-200/60">
       <div className="max-w-3xl mx-auto px-5 py-4 flex items-center gap-3">
         <Link href="/home" className="flex items-center gap-2.5 shrink-0">
           <Logo size={36} showText={false} />
@@ -167,7 +167,7 @@ function BottomNav({
       )}
       <nav className="fixed bottom-0 left-0 right-0 z-40 pointer-events-none">
         <div className="max-w-3xl mx-auto px-4 pb-4">
-          <div className="pointer-events-auto bg-white/95 backdrop-blur-xl border border-ink-200/60 rounded-3xl shadow-xl shadow-ink-900/5 px-2 py-2">
+          <div className="pointer-events-auto bg-white border border-ink-200/60 rounded-3xl shadow-xl shadow-ink-900/5 px-2 py-2">
             <div className="grid grid-cols-4 gap-1">
               {tabs.map((t) => {
                 const Icon = t.icon;

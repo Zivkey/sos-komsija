@@ -94,7 +94,7 @@ export default function ExplorePage() {
           <Card className="mt-5 overflow-hidden">
             <div className="relative h-[400px] bg-gradient-to-br from-sky-50 to-emerald-50">
               <BigMap requests={pending} />
-              <div className="absolute top-3 left-3 px-3 py-2 bg-white/95 backdrop-blur rounded-full shadow flex items-center gap-2">
+              <div className="absolute top-3 left-3 px-3 py-2 bg-white rounded-full shadow flex items-center gap-2">
                 <MapPin size={14} className="text-brand-500" />
                 <span className="text-xs font-bold text-ink-800">Vračar</span>
               </div>

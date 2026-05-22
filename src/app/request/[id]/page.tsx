@@ -59,7 +59,7 @@ export default function RequestPage({ params }: { params: Promise<{ id: string }
 
   return (
     <div className="min-h-dvh flex flex-col bg-ink-50/60">
-      <header className="sticky top-0 z-30 bg-white/85 backdrop-blur-xl border-b border-ink-200/60">
+      <header className="sticky top-0 z-30 bg-white border-b border-ink-200/60">
         <div className="max-w-3xl mx-auto px-5 py-4 flex items-center gap-3">
           <button
             onClick={() => router.push("/home")}
@@ -89,7 +89,7 @@ export default function RequestPage({ params }: { params: Promise<{ id: string }
           <Card className="overflow-hidden">
             <div className="relative h-64 bg-gradient-to-br from-sky-50 to-emerald-50">
               <ProviderMap status={request.status} />
-              <div className="absolute top-3 left-3 flex items-center gap-2 px-3 py-2 bg-white/95 backdrop-blur rounded-full shadow-lg">
+              <div className="absolute top-3 left-3 flex items-center gap-2 px-3 py-2 bg-white rounded-full shadow-lg">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-xs font-bold text-ink-800">
                   {request.status === "accepted" ? "Stiže za 8 min" : "Stigao na lokaciju"}
@@ -230,7 +230,7 @@ export default function RequestPage({ params }: { params: Promise<{ id: string }
         )}
       </main>
 
-      <footer className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
+      <footer className="sticky bottom-0 z-20 bg-white border-t border-ink-200/60 p-4">
         <div className="max-w-3xl mx-auto space-y-2">
           {request.status === "accepted" && !isUser && (
             <Button

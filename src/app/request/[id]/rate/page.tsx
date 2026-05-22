@@ -77,7 +77,7 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
 
   return (
     <div className="min-h-dvh flex flex-col bg-ink-50/60">
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-ink-200/60">
+      <header className="sticky top-0 z-30 bg-white border-b border-ink-200/60">
         <div className="max-w-3xl mx-auto px-5 py-4 flex items-center gap-3">
           <button
             onClick={() => router.back()}
@@ -189,7 +189,7 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-1/2 h-1/2 rounded-full bg-white/20 blur-xl" />
                     </div>
-                    <div className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 bg-black/40 backdrop-blur-sm rounded text-[10px] font-bold text-white">
+                    <div className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 bg-black/70 rounded text-[10px] font-bold text-white">
                       IMG_{1240 + i}
                     </div>
                     <button
@@ -260,7 +260,7 @@ export default function RatePage({ params }: { params: Promise<{ id: string }> }
         )}
       </main>
 
-      <footer className="sticky bottom-0 z-20 bg-white/95 backdrop-blur-xl border-t border-ink-200/60 p-4">
+      <footer className="sticky bottom-0 z-20 bg-white border-t border-ink-200/60 p-4">
         <div className="max-w-3xl mx-auto">
           <Button onClick={submit} size="lg" fullWidth disabled={rating === 0}>
             Pošalji ocenu

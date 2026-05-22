@@ -53,7 +53,7 @@ export default function ChatPage({ params }: { params: Promise<{ id: string }> }
 
   return (
     <div className="min-h-dvh flex flex-col bg-ink-50/60">
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-ink-200/60">
+      <header className="sticky top-0 z-30 bg-white border-b border-ink-200/60">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <button
             onClick={() => router.back()}
