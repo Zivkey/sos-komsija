@@ -98,7 +98,7 @@ export default function Onboarding() {
     if (step < slides.length - 1) setStep((s) => s + 1);
     else {
       setOnboarded();
-      router.push("/auth/agreement");
+      router.push("/auth/phone");
     }
   };
 
@@ -108,7 +108,7 @@ export default function Onboarding() {
 
   const skip = () => {
     setOnboarded();
-    router.push("/auth/agreement");
+    router.push("/auth/phone");
   };
 
   const slide = slides[step];
